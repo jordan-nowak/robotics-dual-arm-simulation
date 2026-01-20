@@ -14,6 +14,12 @@ The development was carried out on version:
 - cmake 4.2.1
 - ninja 1.13.2
 - sfml 3.0.2
+- eigen 5.0.0
+
+**Note:** 
+    Eigen is a header-only dependency used for matrix and vector computations. 
+    To install it, create a third_party folder at the root of the project and place the Eigen directory inside (e.g. third_party/eigen). 
+    Download Eigen from: https://libeigen.gitlab.io/
 
 ---
 ## Development

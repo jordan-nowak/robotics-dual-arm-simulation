@@ -3,16 +3,17 @@
 #include <SFML/System/Vector2.hpp>
 #include <vector>
 
+
 namespace robot::core {
-
-    constexpr float DefaultGravity = 9.81f; /*!< Earth gravity (m/s²) */
-
+    
+    #define EARTH_GRAVITY 9.81f /*!< Standard gravity on Earth (m/s^2) */
+    
     /**
      * @brief Environment configuration for the simulation
      */
     struct EnvironmentConfig {
         sf::Vector2f worldSize; /*!< World dimensions (width, height) */
-        float gravity = DefaultGravity; /*!< Gravity acceleration (m/s²) */
+        float gravity = EARTH_GRAVITY; /*!< Gravity acceleration (m/s^2) */
         float timeStep; /*!< Simulation timestep (s) */
     };
 

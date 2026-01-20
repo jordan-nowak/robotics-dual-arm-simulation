@@ -12,7 +12,7 @@ TEST(EnvironmentTest, ConstructWithDefaultGravity)
 
     Environment env(config);
 
-    EXPECT_FLOAT_EQ(env.gravity(), DefaultGravity);
+    EXPECT_FLOAT_EQ(env.gravity(), EARTH_GRAVITY);
 }
 
 /// @brief Construction of the environment with custom gravity
