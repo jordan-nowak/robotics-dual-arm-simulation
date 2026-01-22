@@ -29,3 +29,6 @@ rules.ninja
 .vscode/
 .idea/
 .DS_Store
+
+# Third-party module
+third_party
