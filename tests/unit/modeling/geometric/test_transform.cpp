@@ -7,7 +7,7 @@ using namespace robot::modeling::geometric;
 TEST(TransformTest, ConstructIdentity) {
     Transform T;
 
-    const Eigen::Matrix4f& mat = T.matrix();
+    const Eigen::Matrix4d& mat = T.matrix();
 
     EXPECT_FLOAT_EQ(mat(0,0), 1.f);
     EXPECT_FLOAT_EQ(mat(1,1), 1.f);
@@ -37,7 +37,7 @@ TEST(TransformTest, ConstructfromModifiedDH) {
 
     Transform T = Transform::fromModifiedDH(a, alpha, d, theta);
 
-    const Eigen::Matrix4f& mat = T.matrix();
+    const Eigen::Matrix4d& mat = T.matrix();
 
     // Expected values computed externally
     EXPECT_NEAR(mat(0,0), 0.5403023f, 1e-5f);
@@ -68,7 +68,7 @@ TEST(TransformTest, ComposeTransforms) {
 
     Transform T3 = T1 * T2;
 
-    const Eigen::Matrix4f& mat = T3.matrix();
+    const Eigen::Matrix4d& mat = T3.matrix();
 
     EXPECT_FLOAT_EQ(mat(0,0), 1.f);
     EXPECT_FLOAT_EQ(mat(1,1), 1.f);
@@ -93,7 +93,7 @@ TEST(TransformTest, ComposeTransforms) {
 TEST(TransformTest, AccessMatrix) {
     Transform T = Transform::fromModifiedDH(1.f, 0.f, 0.f, 0.f);
 
-    const Eigen::Matrix4f& mat = T.matrix();
+    const Eigen::Matrix4d& mat = T.matrix();
 
     EXPECT_FLOAT_EQ(mat(0,0), 1.f);
     EXPECT_FLOAT_EQ(mat(1,1), 1.f);
@@ -109,7 +109,7 @@ TEST(TransformTest, AccessMatrix) {
 TEST(TransformTest, PositionExtraction) {
     Transform T = Transform::fromModifiedDH(1.f, 0.f, 0.f, 0.f);
 
-    Eigen::Vector3f position = T.position();
+    Eigen::Vector3d position = T.position();
     
     EXPECT_FLOAT_EQ(position(0), 1.f);
     EXPECT_FLOAT_EQ(position(1), 0.f);
@@ -120,7 +120,7 @@ TEST(TransformTest, PositionExtraction) {
 TEST(TransformTest, RotationIsOrthonormal) {
     Transform T = Transform::fromModifiedDH(1.f, 0.f, 0.f, 0.f);
     
-    Eigen::Matrix3f rotation = T.rotation();
+    Eigen::Matrix3d rotation = T.rotation();
 
     EXPECT_FLOAT_EQ(rotation(0,0), 1.f);
     EXPECT_FLOAT_EQ(rotation(0,1), 0.f);

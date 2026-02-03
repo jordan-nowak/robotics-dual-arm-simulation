@@ -62,24 +62,24 @@ namespace robot::modeling::geometric {
          *
          * @return 4x4 homogeneous transformation matrix
          */
-        const Eigen::Matrix4f& matrix() const noexcept;
+        const Eigen::Matrix4d& matrix() const noexcept;
 
         /**
          * @brief Position (translation) part of the transformation matrix
          *
          * @return 3x1 translation vector
          */
-        Eigen::Vector3f position() const noexcept;
+        Eigen::Vector3d position() const noexcept;
 
         /**
          * @brief Orientation (rotation matrix) part of the transformation matrix
          *
          * @return 3x3 rotation matrix
          */
-        Eigen::Matrix3f rotation() const noexcept;
+        Eigen::Matrix3d rotation() const noexcept;
         
     private:
-        Eigen::Matrix4f m_T;  /*!< Homogeneous transformation matrix */
+        Eigen::Matrix4d m_T;  /*!< Homogeneous transformation matrix */
     };
 
 } // namespace robot::modeling::geometric

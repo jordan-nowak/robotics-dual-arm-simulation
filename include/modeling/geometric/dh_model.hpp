@@ -46,7 +46,7 @@ namespace robot::modeling::geometric {
          */
         Transform baseToLink(
             std::size_t _linkIndex,
-            const std::vector<float>& _jointPositions) const;
+            const std::vector<double>& _jointPositions) const;
 
         /**
          * @brief Compute the transformation from base to end-effector
@@ -59,7 +59,7 @@ namespace robot::modeling::geometric {
          * @return Transformation from base frame to the end-effector frame
          */
         Transform baseToEndEffector(
-            const std::vector<float>& _jointPositions) const;
+            const std::vector<double>& _jointPositions) const;
 
         /**
          * @brief Compute all intermediate frames from base to end-effector
@@ -69,7 +69,7 @@ namespace robot::modeling::geometric {
          *         frames[i] = base -> link[i]
          */
         std::vector<Transform> frames(
-            const std::vector<float>& _jointPositions) const;
+            const std::vector<double>& _jointPositions) const;
 
     private:
         const robot::core::RobotConfig& m_config; /*!< Reference to robot static configuration */

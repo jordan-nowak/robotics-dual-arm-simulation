@@ -31,9 +31,9 @@ TEST(JacobianModelTest, JacobianHasCorrectDimensions) {
 
     JacobianModel jacobian(config);
 
-    std::vector<float> q = {0.f};
+    std::vector<double> q = {0.f};
 
-    Eigen::MatrixXf J = jacobian.compute(q);
+    Eigen::MatrixXd J = jacobian.compute(q);
 
     EXPECT_EQ(J.rows(), 6);
     EXPECT_EQ(J.cols(), config.jointCount());

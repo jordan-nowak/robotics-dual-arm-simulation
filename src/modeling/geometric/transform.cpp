@@ -3,11 +3,17 @@
 
 namespace robot::modeling::geometric {
 
-    Transform::Transform(){
+    Transform::Transform() 
+    {
         m_T.setIdentity();
     }
 
-    Transform Transform::fromModifiedDH(float _a, float _alpha, float _d, float _theta) {
+    Transform Transform::fromModifiedDH(
+        float _a, 
+        float _alpha, 
+        float _d, 
+        float _theta) 
+    {
         Transform T;
 
         const float c_theta = std::cos(_theta);
@@ -24,21 +30,26 @@ namespace robot::modeling::geometric {
         return T;
     }
 
-    Transform Transform::operator*(const Transform& _other) const{
+    Transform Transform::operator*(
+        const Transform& _other) const
+    {
         Transform result;
         result.m_T = m_T * _other.m_T;
         return result;
     }
 
-    const Eigen::Matrix4f& Transform::matrix() const noexcept {
+    const Eigen::Matrix4d& Transform::matrix() const noexcept 
+    {
         return m_T;
     }
 
-    Eigen::Vector3f Transform::position() const noexcept {
+    Eigen::Vector3d Transform::position() const noexcept 
+    {
         return m_T.block<3,1>(0,3);
     }
 
-    Eigen::Matrix3f Transform::rotation() const noexcept {
+    Eigen::Matrix3d Transform::rotation() const noexcept 
+    {
         return m_T.block<3,3>(0,0);
     }
 
