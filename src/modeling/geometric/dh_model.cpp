@@ -4,22 +4,26 @@
 namespace robot::modeling::geometric {
 
     DHModel::DHModel(const robot::core::RobotConfig& _config)
-        : m_config(_config) {
+        : m_config(_config) 
+    {
     }
 
     Transform DHModel::baseToLink(
         std::size_t _linkIndex,
-        const std::vector<float>& _jointPositions) const {
-        
+        const std::vector<double>& _jointPositions) const
+    {
         if (_linkIndex >= m_config.linkCount())
             throw std::out_of_range("DHModel::baseToLink: Link index out of range");
+    
+        if (_jointPositions.size() != m_config.jointCount())
+            throw std::invalid_argument("DHModel::baseToLink: '_jointPositions' vector size mismatch");
         
         return frames(_jointPositions).at(_linkIndex);
     }
 
     Transform DHModel::baseToEndEffector(
-        const std::vector<float>& _jointPositions) const {
-
+        const std::vector<double>& _jointPositions) const 
+    {
         if (_jointPositions.size() != m_config.jointCount())
             throw std::invalid_argument("DHModel::baseToEndEffector: '_jointPositions' vector size mismatch");
         
@@ -27,8 +31,8 @@ namespace robot::modeling::geometric {
     }
 
     std::vector<Transform> DHModel::frames(
-        const std::vector<float>& _jointPositions) const {
-
+        const std::vector<double>& _jointPositions) const
+    {
         if (_jointPositions.size() != m_config.jointCount())
             throw std::invalid_argument("DHModel::frames: '_jointPositions' vector size mismatch");
 

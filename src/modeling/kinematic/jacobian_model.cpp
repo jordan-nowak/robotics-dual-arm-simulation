@@ -9,8 +9,8 @@ namespace robot::modeling::kinematic {
         , m_dhModel(_config) {
     }
 
-    Eigen::MatrixXf JacobianModel::compute(
-        const std::vector<float>& _jointPositions) const {
+    Eigen::MatrixXd JacobianModel::compute(
+        const std::vector<double>& _jointPositions) const {
 
         const std::size_t nbJoints = m_config.jointCount();
 
@@ -18,12 +18,12 @@ namespace robot::modeling::kinematic {
             throw std::invalid_argument("JacobianModel::compute: '_jointPositions' vector size mismatch");
 
         // Jacobian 6xN
-        Eigen::MatrixXf Jacobian(6, nbJoints);
+        Eigen::MatrixXd Jacobian(6, nbJoints);
         Jacobian.setZero();
 
         // // Transformation from base to end-effector
         Transform T_ee = m_dhModel.baseToEndEffector(_jointPositions);
-        Eigen::Vector3f p_ee = T_ee.position();
+        Eigen::Vector3d p_ee = T_ee.position();
 
         for (std::size_t i = 0; i < nbJoints; ++i) {
 
@@ -31,16 +31,16 @@ namespace robot::modeling::kinematic {
             Transform T_i = m_dhModel.baseToLink(i, _jointPositions);
 
             // Joint position
-            Eigen::Vector3f p_i = T_i.position();
+            Eigen::Vector3d p_i = T_i.position();
 
             // Rotation around Z-axis
-            Eigen::Vector3f z_i = T_i.rotation().col(2);
+            Eigen::Vector3d z_i = T_i.rotation().col(2);
 
             // Linear part of Jacobian
-            Eigen::Vector3f Jv = z_i.cross(p_ee - p_i);
+            Eigen::Vector3d Jv = z_i.cross(p_ee - p_i);
 
             // Angular part of Jacobian
-            Eigen::Vector3f Jw = z_i;
+            Eigen::Vector3d Jw = z_i;
 
             // Fill Jacobian
             Jacobian.block<3,1>(0, i) = Jv;

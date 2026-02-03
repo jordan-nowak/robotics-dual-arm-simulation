@@ -39,8 +39,8 @@ namespace robot::modeling::kinematic {
          *  - [0:2] Jv = linear velocity
          *  - [3:5] Jw = angular velocity
          */
-        Eigen::MatrixXf compute(
-            const std::vector<float>& _jointPositions) const;
+        Eigen::MatrixXd compute(
+            const std::vector<double>& _jointPositions) const;
 
     private:
         const robot::core::RobotConfig& m_config;

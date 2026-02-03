@@ -21,7 +21,7 @@ TEST(DHModelTest, SingleLinkPureTranslation) {
 
     DHModel model(config);
     
-    std::vector<float> jointPositions = {0.0f};
+    std::vector<double> jointPositions = {0.0f};
 
     Transform T = model.baseToEndEffector(jointPositions);
     const auto& M = T.matrix();
@@ -60,7 +60,7 @@ TEST(DHModelTest, ThrowsIfJointVectorSizeMismatch) {
 
     DHModel model(config);
     
-    std::vector<float> jointPositions = {0.f}; // Wrong size
+    std::vector<double> jointPositions = {0.f}; // Wrong size
     
     EXPECT_THROW(
         model.baseToEndEffector(jointPositions),
@@ -78,7 +78,7 @@ TEST(DHModelTest, ThrowsIfLinkIndexOutOfRange) {
 
     DHModel model(config);
     
-    std::vector<float> jointPositions = {0.f, 0.f};
+    std::vector<double> jointPositions = {0.f, 0.f};
     
     EXPECT_THROW(
         model.baseToLink(999, jointPositions),
