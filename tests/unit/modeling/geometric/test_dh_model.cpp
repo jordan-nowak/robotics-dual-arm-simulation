@@ -7,7 +7,11 @@ using namespace robot::core;
 
 /// @brief This test verifies the DHModel can be constructed with a valid config
 TEST(DHModelTest, ConstructWithValidRobotConfig) {
-    RobotConfig config("test_robot", {}, {});
+    RobotConfig config(
+        "test_robot",
+        {{ .name = "Joint_0", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f}},
+        {{ .name = "Link_0", .a = 0.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 0, .ID_parent = ORIGIN, .motor = true}}
+    );
     EXPECT_NO_THROW(DHModel model(config));
 }
 
@@ -15,8 +19,8 @@ TEST(DHModelTest, ConstructWithValidRobotConfig) {
 TEST(DHModelTest, SingleLinkPureTranslation) {
     RobotConfig config(
         "test_robot",
-        {{"j1",-3.14f,3.14f,1}},
-        {{"l1",1.0f,0.0f,0.0f,0.0f}}
+        {{ .name = "Joint_0", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f}},
+        {{ .name = "Link_0", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 0, .ID_parent = ORIGIN, .motor = true}}
     );
 
     DHModel model(config);
@@ -40,8 +44,14 @@ TEST(DHModelTest, SingleLinkPureTranslation) {
 TEST(DHModelTest, TwoLinksChain) {
     RobotConfig config(
         "test_robot",
-        {{"j1",-3.14f,3.14f,1}, {"j2",-3.14f,3.14f,1}},
-        {{"l1",1,0,0,0}, {"l2",1,0,0,0}}
+        {
+            { .name = "Joint_0", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f},
+            { .name = "Joint_1", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f}
+        },
+        {
+            { .name = "Link_0", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 0, .ID_parent = ORIGIN, .motor = true},
+            { .name = "Link_1", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 1, .ID_parent = 0, .motor = true}
+        }
     );
 
     DHModel model(config);
@@ -54,8 +64,14 @@ TEST(DHModelTest, TwoLinksChain) {
 TEST(DHModelTest, ThrowsIfJointVectorSizeMismatch) {
     RobotConfig config(
         "test_robot",
-        {{"j1",-3.14f,3.14f,1}, {"j2",-3.14f,3.14f,1}},
-        {{"l1",1,0,0,0}, {"l2",1,0,0,0}}
+        {
+            { .name = "Joint_0", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f},
+            { .name = "Joint_1", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f}
+        },
+        {
+            { .name = "Link_0", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 0, .ID_parent = ORIGIN, .motor = true},
+            { .name = "Link_1", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 1, .ID_parent = 0, .motor = true}
+        }
     );
 
     DHModel model(config);
@@ -72,8 +88,14 @@ TEST(DHModelTest, ThrowsIfJointVectorSizeMismatch) {
 TEST(DHModelTest, ThrowsIfLinkIndexOutOfRange) {
     RobotConfig config(
         "test_robot",
-        {{"j1",-3.14f,3.14f,1}, {"j2",-3.14f,3.14f,1}},
-        {{"l1",1,0,0,0}, {"l2",1,0,0,0}}
+        {
+            { .name = "Joint_0", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f},
+            { .name = "Joint_1", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f}
+        },
+        {
+            { .name = "Link_0", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 0, .ID_parent = ORIGIN, .motor = true},
+            { .name = "Link_1", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 1, .ID_parent = 0, .motor = true}
+        }
     );
 
     DHModel model(config);
@@ -90,8 +112,14 @@ TEST(DHModelTest, ThrowsIfLinkIndexOutOfRange) {
 TEST(DHModelTest, FramesCount) {
     RobotConfig config(
         "test_robot",
-        {{"j1",-3.14f,3.14f,1}, {"j2",-3.14f,3.14f,1}},
-        {{"l1",1,0,0,0}, {"l2",1,0,0,0}}
+        {
+            { .name = "Joint_0", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f},
+            { .name = "Joint_1", .minPosition = -3.14f, .maxPosition = 3.14f, .maxVelocity = 1.0f}
+        },
+        {
+            { .name = "Link_0", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 0, .ID_parent = ORIGIN, .motor = true},
+            { .name = "Link_1", .a = 1.f, .alpha = 0.f, .d = 0.f, .theta = 0.f, .mass = 1.0, .com = Eigen::Vector3d(0.0, 0.0, 0.0), .ID_link = 1, .ID_parent = 0, .motor = true}
+        }
     );
 
     DHModel model(config);
