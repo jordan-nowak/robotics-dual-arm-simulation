@@ -32,6 +32,7 @@ namespace robot::modeling::kinematic {
         /**
          * @brief Compute the geometric Jacobian at the end-effector
          *
+         * @param _linkIndex Link Index of the end effector
          * @param _jointPositions Joint positions (rad)
          * @return 6xN Jacobian matrix (N = number of joints)
          * 
@@ -40,6 +41,7 @@ namespace robot::modeling::kinematic {
          *  - [3:5] Jw = angular velocity
          */
         Eigen::MatrixXd compute(
+            std::size_t _linkIndex,
             const std::vector<double>& _jointPositions) const;
 
     private:

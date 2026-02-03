@@ -10,6 +10,7 @@ namespace robot::modeling::kinematic {
     }
 
     Eigen::MatrixXd JacobianModel::compute(
+        std::size_t _linkIndex,
         const std::vector<double>& _jointPositions) const {
 
         const std::size_t nbJoints = m_config.jointCount();
@@ -17,12 +18,12 @@ namespace robot::modeling::kinematic {
         if (_jointPositions.size() != nbJoints)
             throw std::invalid_argument("JacobianModel::compute: '_jointPositions' vector size mismatch");
 
-        // Jacobian 6xN
+        // Initialize Jacobian 6xN
         Eigen::MatrixXd Jacobian(6, nbJoints);
         Jacobian.setZero();
 
-        // // Transformation from base to end-effector
-        Transform T_ee = m_dhModel.baseToEndEffector(_jointPositions);
+        // Transformation from base to end-effector
+        Transform T_ee = m_dhModel.baseToLink(_linkIndex, _jointPositions);
         Eigen::Vector3d p_ee = T_ee.position();
 
         for (std::size_t i = 0; i < nbJoints; ++i) {

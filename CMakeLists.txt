@@ -11,7 +11,7 @@ target_link_libraries(shared-graphics PUBLIC SFML::Graphics SFML::Window SFML::S
 target_include_directories(shared-graphics PUBLIC ${PROJECT_SOURCE_DIR}/include PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(shared-core SHARED src/core/robot.cpp src/core/robot_config.cpp src/core/environment.cpp)
-target_include_directories(shared-core PUBLIC ${PROJECT_SOURCE_DIR}/include PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(shared-core PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(shared-modeling SHARED
     src/modeling/geometric/transform.cpp

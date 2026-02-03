@@ -36,23 +36,34 @@ namespace robot::modeling::geometric {
         if (_jointPositions.size() != m_config.jointCount())
             throw std::invalid_argument("DHModel::frames: '_jointPositions' vector size mismatch");
 
-        std::vector<Transform> frames;
-        frames.reserve(m_config.linkCount());
-
+        std::vector<Transform> frames(m_config.linkCount());
+        std::vector<Transform> intermediateFrames(m_config.linkCount());
         Transform T_current;
 
+        // First, compute all individual link transformations
         for (std::size_t i = 0; i < m_config.linkCount(); ++i) {
             const auto& dh = m_config.links()[i];
-            float theta = dh.theta + _jointPositions[i];
-
+            
             Transform T_i = Transform::fromModifiedDH(
-                dh.a, dh.alpha, dh.d, theta
+                dh.a, dh.alpha, dh.d, dh.theta + _jointPositions[i]
             );
 
-            T_current = T_current * T_i;
-            frames.push_back(T_current);
+            // Store the intermediate transformation
+            intermediateFrames[i] = T_i;
         }
+        
+        // Then, compute the cumulative transformations from base to each link
+        for (std::size_t i = 0; i < m_config.linkCount(); ++i) {
+            int current = static_cast<int>(i);
+            
+            // Traverse from base to the `i` link
+            while (current != -1) {
+                frames[i] = intermediateFrames[current] * frames[i];
 
+                // Take the parent link for the next iteration
+                current = m_config.links()[current].ID_parent;
+            }
+        }
         return frames;
     }
 

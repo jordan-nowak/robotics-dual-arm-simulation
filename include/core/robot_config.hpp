@@ -2,8 +2,13 @@
 
 #include <string>
 #include <vector>
+#include <iostream>
+#include <unordered_set>
+#include <Eigen/Dense>
 
 namespace robot::core {
+
+    #define ORIGIN -1 /*!< Origin of the coordinate system */
 
     /**
      * @brief Static configuration of a robot joint
@@ -19,17 +24,22 @@ namespace robot::core {
      * @brief Configuration of a robot link using DH parameters
      */
     struct LinkConfig {
-        std::string name;   /*!< Link name */
+        std::string name;       /*!< Link name */
 
         // --- Kinematic parameters (DH)
-        float a;            /*!< Link length */
-        float alpha;        /*!< Link twist */
-        float d;            /*!< Link offset */
-        float theta;        /*!< Joint offset */
+        float a;                /*!< Link length */
+        float alpha;            /*!< Link twist */
+        float d;                /*!< Link offset */
+        float theta;            /*!< Joint offset */
 
         // --- Physical properties
-        float mass;         /*!< Link mass */
-        float com;          /*!< Center of mass position to the link reference frame */
+        float mass;             /*!< Link mass */
+        Eigen::Vector3d com;    /*!< Center of mass position to the link reference frame */
+        
+        // --- Structure
+        int ID_link;            /*!< Index of current link */
+        int ID_parent = ORIGIN; /*!< Index of parent link (`ORIGIN` if root) */
+        bool motor;             /*!< Whether the link has a motor */
     };
 
     /**
@@ -67,6 +77,18 @@ namespace robot::core {
         std::string m_name; /*!< Robot name */
         std::vector<JointConfig> m_joints; /*!< Joint configurations */
         std::vector<LinkConfig> m_links; /*!< Joint configurations */
+        
+        /** 
+         * @brief Check if the robot has a single base link
+         * @return True if there is exactly one base link
+         */
+        bool _hasSingleBase() const;
+
+        /** 
+         * @brief Check if all links can reach the base link
+         * @return True if the robot is fully connected
+         */
+        bool _allLinksReachBase() const;
     };
 
 } // namespace robot::core
