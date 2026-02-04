@@ -20,6 +20,11 @@ add_library(shared-modeling SHARED
     src/modeling/geometric/selection_matrix.cpp
     src/modeling/kinematic/jacobian_model.cpp)
 
+add_library(shared-control SHARED 
+    src/control/pseudo_inverse.cpp)
+target_link_libraries(shared-control PUBLIC shared-modeling shared-core)
+target_include_directories(shared-control PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_link_libraries(shared-modeling PUBLIC shared-core)
 target_include_directories(shared-modeling PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen)
 
@@ -28,6 +33,10 @@ add_executable(app apps/demo.cpp)
 target_link_libraries(app shared-graphics shared-core)
 
 # TESTS
+## control
+add_executable(test-control-pseudo_inverse tests/unit/control/test_pseudo_inverse.cpp)
+target_link_libraries(test-control-pseudo_inverse PRIVATE shared-control gtest gtest_main)
+
 ## graphics
 add_executable(test-graphics tests/unit/graphics/test_plot2d.cpp)
 target_link_libraries(test-graphics PRIVATE shared-graphics gtest gtest_main)
@@ -63,3 +72,4 @@ add_test(NAME DHModelTests COMMAND test-dh-model)
 add_test(NAME CenterOfMassTests COMMAND test-center-of-mass)
 add_test(NAME SelectionMatrixTests COMMAND test-selection-matrix)
 add_test(NAME JacobianModelTests COMMAND test-jacobian-model)
+add_test(NAME PseudoInverseTests COMMAND test-control-pseudo_inverse)
