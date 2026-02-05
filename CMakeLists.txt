@@ -21,6 +21,11 @@ add_library(shared-modeling SHARED
     src/modeling/kinematic/jacobian_model.cpp
     src/modeling/kinematic/jacobian_com.cpp)
 
+add_library(shared-task SHARED 
+    src/task/task.cpp)
+target_link_libraries(shared-task PUBLIC shared-core)
+target_include_directories(shared-task PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 add_library(shared-control SHARED 
     src/control/hierarchical.cpp 
     src/control/pseudo_inverse.cpp)
@@ -67,6 +72,10 @@ target_link_libraries (test-dh-model PRIVATE shared-modeling gtest gtest_main)
 target_link_libraries (test-jacobian-model PRIVATE shared-modeling gtest gtest_main)
 target_link_libraries (test-jacobian-com PRIVATE shared-modeling gtest gtest_main)
 
+## task
+add_executable (test-task-task tests/unit/task/test_task.cpp)
+target_link_libraries (test-task-task PRIVATE shared-task shared-core gtest gtest_main)
+
 ## CMake testing with GoogleTest
 enable_testing()
 add_test(NAME Plot2DTests COMMAND test-graphics)
@@ -81,3 +90,4 @@ add_test(NAME JacobianModelTests COMMAND test-jacobian-model)
 add_test(NAME JacobianComTests COMMAND test-jacobian-com)
 add_test(NAME HierarchicalTests COMMAND test-control-hierarchical)
 add_test(NAME PseudoInverseTests COMMAND test-control-pseudo_inverse)
+add_test(NAME TaskTests COMMAND test-task-task)
