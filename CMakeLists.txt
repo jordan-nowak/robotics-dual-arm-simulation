@@ -22,6 +22,7 @@ add_library(shared-modeling SHARED
     src/modeling/kinematic/jacobian_com.cpp)
 
 add_library(shared-control SHARED 
+    src/control/hierarchical.cpp 
     src/control/pseudo_inverse.cpp)
 target_link_libraries(shared-control PUBLIC shared-modeling shared-core)
 target_include_directories(shared-control PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
@@ -35,7 +36,9 @@ target_link_libraries(app shared-graphics shared-core)
 
 # TESTS
 ## control
+add_executable(test-control-hierarchical tests/unit/control/test_hierarchical.cpp)
 add_executable(test-control-pseudo_inverse tests/unit/control/test_pseudo_inverse.cpp)
+target_link_libraries(test-control-hierarchical PRIVATE shared-control gtest gtest_main)
 target_link_libraries(test-control-pseudo_inverse PRIVATE shared-control gtest gtest_main)
 
 ## graphics
@@ -76,4 +79,5 @@ add_test(NAME CenterOfMassTests COMMAND test-center-of-mass)
 add_test(NAME SelectionMatrixTests COMMAND test-selection-matrix)
 add_test(NAME JacobianModelTests COMMAND test-jacobian-model)
 add_test(NAME JacobianComTests COMMAND test-jacobian-com)
+add_test(NAME HierarchicalTests COMMAND test-control-hierarchical)
 add_test(NAME PseudoInverseTests COMMAND test-control-pseudo_inverse)
