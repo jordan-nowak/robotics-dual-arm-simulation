@@ -4,7 +4,7 @@
 using namespace robot::core;
 
 /// @brief Construction of the robot from `RobotConfig`
-TEST(RobotTest, ConstructFromConfiguration)
+TEST(RobotTests, ConstructFromConfiguration)
 {
     RobotConfig config(
         "test_robot",
@@ -26,7 +26,7 @@ TEST(RobotTest, ConstructFromConfiguration)
 }
 
 /// @brief Verify that the state exists and is accessible in read only depending on the configuration.
-TEST(RobotTest, ConstStateAccessIsReadOnly)
+TEST(RobotTests, ConstStateAccessIsReadOnly)
 {
     RobotConfig config(
         "test_robot",
@@ -42,7 +42,7 @@ TEST(RobotTest, ConstStateAccessIsReadOnly)
 }
 
 /// @brief Verify the read/write separation.
-TEST(RobotTest, NonConstStateAccessAllowsModification)
+TEST(RobotTests, NonConstStateAccessAllowsModification)
 {
     RobotConfig config(
         "test_robot",
