@@ -4,7 +4,7 @@
 using namespace robot::core;
 
 /// @brief Construction of the environment with default gravity
-TEST(EnvironmentTest, ConstructWithDefaultGravity)
+TEST(EnvironmentTests, ConstructWithDefaultGravity)
 {
     EnvironmentConfig config;
     config.worldSize = {200.f, 200.f};
@@ -16,7 +16,7 @@ TEST(EnvironmentTest, ConstructWithDefaultGravity)
 }
 
 /// @brief Construction of the environment with custom gravity
-TEST(EnvironmentTest, ConstructWithCustomGravity)
+TEST(EnvironmentTests, ConstructWithCustomGravity)
 {
     EnvironmentConfig config;
     config.worldSize = {10.f, 10.f};
@@ -29,7 +29,7 @@ TEST(EnvironmentTest, ConstructWithCustomGravity)
 }
 
 /// @brief Verify that the worldsize value is accessible
-TEST(EnvironmentTest, WorldSizeIsAccessible)
+TEST(EnvironmentTests, WorldSizeIsAccessible)
 {
     EnvironmentConfig config;
     config.worldSize = {42.f, 24.f};
@@ -42,7 +42,7 @@ TEST(EnvironmentTest, WorldSizeIsAccessible)
 }
 
 /// @brief Verify that the timestep value is accessible
-TEST(EnvironmentTest, TimeStepIsAccessible)
+TEST(EnvironmentTests, TimeStepIsAccessible)
 {
     EnvironmentConfig config;
     config.worldSize = {10.f, 10.f};

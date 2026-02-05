@@ -4,7 +4,7 @@
 using namespace robot::core;
 
 /// @brief Construction of the robot 
-TEST(RobotConfigTest, ConstructWithParameters)
+TEST(RobotConfigTests, ConstructWithParameters)
 {
     RobotConfig config(
         "test_robot",
@@ -24,7 +24,7 @@ TEST(RobotConfigTest, ConstructWithParameters)
 }
 
 /// @brief Verify that the chain is invalid for multiple link attached to the base
-TEST(RobotConfigTest, MultipleBases) {
+TEST(RobotConfigTests, MultipleBases) {
     EXPECT_THROW( 
         RobotConfig config(
             "test_robot",
@@ -82,7 +82,7 @@ TEST(RobotConfigValidation, CycleDetected) {
 }
 
 /// @brief Verify that the configuration is accessible
-TEST(RobotConfigTest, ConfigurationIsAccessible)
+TEST(RobotConfigTests, ConfigurationIsAccessible)
 {
     RobotConfig config(
         "test_robot",
@@ -114,7 +114,7 @@ TEST(RobotConfigTest, ConfigurationIsAccessible)
 }
 
 /// @brief Verify access via a constant reference (design guarantee)
-TEST(RobotConfigTest, AccessThroughConstReference)
+TEST(RobotConfigTests, AccessThroughConstReference)
 {
      RobotConfig config(
         "test_robot",

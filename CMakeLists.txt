@@ -20,10 +20,14 @@ add_library(shared-modeling SHARED
     src/modeling/geometric/selection_matrix.cpp
     src/modeling/kinematic/jacobian_model.cpp
     src/modeling/kinematic/jacobian_com.cpp)
+target_link_libraries(shared-modeling PUBLIC shared-core)
+target_include_directories(shared-modeling PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen)
 
 add_library(shared-task SHARED 
-    src/task/task.cpp)
-target_link_libraries(shared-task PUBLIC shared-core)
+    src/task/task.cpp
+    src/task/task_com.cpp
+    src/task/task_reach_point.cpp)
+target_link_libraries(shared-task PUBLIC shared-core shared-modeling )
 target_include_directories(shared-task PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(shared-control SHARED 
@@ -31,9 +35,6 @@ add_library(shared-control SHARED
     src/control/pseudo_inverse.cpp)
 target_link_libraries(shared-control PUBLIC shared-modeling shared-core)
 target_include_directories(shared-control PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-target_link_libraries(shared-modeling PUBLIC shared-core)
-target_include_directories(shared-modeling PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen)
 
 # EXECUTABLES
 add_executable(app apps/demo.cpp)
@@ -73,15 +74,19 @@ target_link_libraries (test-jacobian-model PRIVATE shared-modeling gtest gtest_m
 target_link_libraries (test-jacobian-com PRIVATE shared-modeling gtest gtest_main)
 
 ## task
-add_executable (test-task-task tests/unit/task/test_task.cpp)
-target_link_libraries (test-task-task PRIVATE shared-task shared-core gtest gtest_main)
+add_executable (test-task-interface tests/unit/task/test_task.cpp)
+add_executable (test-task-com tests/unit/task/test_task_com.cpp)
+add_executable (test-task-reach-point tests/unit/task/test_task_reach_point.cpp)
+target_link_libraries (test-task-interface PRIVATE shared-core shared-modeling shared-task gtest gtest_main)
+target_link_libraries (test-task-com PRIVATE shared-core shared-modeling shared-task gtest gtest_main)
+target_link_libraries (test-task-reach-point PRIVATE shared-core shared-modeling shared-task gtest gtest_main)
 
 ## CMake testing with GoogleTest
 enable_testing()
 add_test(NAME Plot2DTests COMMAND test-graphics)
-add_test(NAME EnvironmentTest COMMAND test-core-environment)
-add_test(NAME RobotTest COMMAND test-core-robot)
-add_test(NAME RobotConfigTest COMMAND test-core-robot-config)
+add_test(NAME EnvironmentTests COMMAND test-core-environment)
+add_test(NAME RobotTests COMMAND test-core-robot)
+add_test(NAME RobotConfigTests COMMAND test-core-robot-config)
 add_test(NAME TransformTests COMMAND test-transform)
 add_test(NAME DHModelTests COMMAND test-dh-model)
 add_test(NAME CenterOfMassTests COMMAND test-center-of-mass)
@@ -90,4 +95,6 @@ add_test(NAME JacobianModelTests COMMAND test-jacobian-model)
 add_test(NAME JacobianComTests COMMAND test-jacobian-com)
 add_test(NAME HierarchicalTests COMMAND test-control-hierarchical)
 add_test(NAME PseudoInverseTests COMMAND test-control-pseudo_inverse)
-add_test(NAME TaskTests COMMAND test-task-task)
+add_test(NAME TaskTests COMMAND test-task-interface)
+add_test(NAME TaskCoMTests COMMAND test-task-com)
+add_test(NAME TaskReachPointTests COMMAND test-task-reach-point)
