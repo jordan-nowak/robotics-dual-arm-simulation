@@ -31,6 +31,7 @@ target_link_libraries(shared-task PUBLIC shared-core shared-modeling )
 target_include_directories(shared-task PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_library(shared-control SHARED 
+    src/control/command.cpp 
     src/control/hierarchical.cpp 
     src/control/pseudo_inverse.cpp)
 target_link_libraries(shared-control PUBLIC shared-modeling shared-core)
@@ -42,8 +43,10 @@ target_link_libraries(app shared-graphics shared-core)
 
 # TESTS
 ## control
+add_executable(test-control-command tests/unit/control/test_command.cpp)
 add_executable(test-control-hierarchical tests/unit/control/test_hierarchical.cpp)
 add_executable(test-control-pseudo_inverse tests/unit/control/test_pseudo_inverse.cpp)
+target_link_libraries(test-control-command PRIVATE shared-control gtest gtest_main)
 target_link_libraries(test-control-hierarchical PRIVATE shared-control gtest gtest_main)
 target_link_libraries(test-control-pseudo_inverse PRIVATE shared-control gtest gtest_main)
 
@@ -94,6 +97,7 @@ add_test(NAME SelectionMatrixTests COMMAND test-selection-matrix)
 add_test(NAME JacobianModelTests COMMAND test-jacobian-model)
 add_test(NAME JacobianComTests COMMAND test-jacobian-com)
 add_test(NAME HierarchicalTests COMMAND test-control-hierarchical)
+add_test(NAME CommandTests COMMAND test-control-command)
 add_test(NAME PseudoInverseTests COMMAND test-control-pseudo_inverse)
 add_test(NAME TaskTests COMMAND test-task-interface)
 add_test(NAME TaskCoMTests COMMAND test-task-com)
