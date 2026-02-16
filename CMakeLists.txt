@@ -2,9 +2,11 @@ cmake_minimum_required( VERSION 3.20...4.2 )
 
 project(robotics-dual-arm-simulation)
 
+# ------------------------------------------------------------
 # PACKAGES
 find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
 
+# ------------------------------------------------------------
 # LIBRARIES
 add_library(shared-graphics SHARED src/graphics/plot2d.cpp)
 target_link_libraries(shared-graphics PUBLIC SFML::Graphics SFML::Window SFML::System)
@@ -38,10 +40,12 @@ add_library(shared-control SHARED
 target_link_libraries(shared-control PUBLIC shared-modeling shared-core shared-task)
 target_include_directories(shared-control PUBLIC ${PROJECT_SOURCE_DIR}/include ${PROJECT_SOURCE_DIR}/third_party/eigen PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+# ------------------------------------------------------------
 # EXECUTABLES
 add_executable(app apps/demo.cpp)
-target_link_libraries(app shared-graphics shared-core)
+target_link_libraries(app shared-graphics shared-core shared-modeling shared-task shared-control)
 
+# ------------------------------------------------------------
 # TESTS
 ## control
 add_executable(test-control-command tests/unit/control/test_command.cpp)
