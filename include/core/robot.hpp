@@ -2,6 +2,7 @@
 
 #include "core/robot_config.hpp"
 #include "core/robot_state.hpp"
+#include "core/robot_state_io.hpp"
 
 namespace robot::core {
 
