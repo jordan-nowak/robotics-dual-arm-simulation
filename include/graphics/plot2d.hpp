@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <iostream>
 
 namespace robot::graphics {
     class Plot2D {
@@ -12,19 +13,39 @@ namespace robot::graphics {
             Plot2D(unsigned int _width, unsigned int _height);
             
             //! \brief This function add a new point in the 'm_points' vector.
-            //! \param The point to add.
+            //! \param _point The point to add.
+            //! \param _color The color of the element.
             //! \return Nothing.
-            void addPoint(sf::Vector2f _point);
+            void addPoint(sf::Vector2f _point, sf::Color _color = sf::Color::Red);
             
             //! \brief This function add a new line in the 'm_lines' vector.
-            //! \param The two points (_point1 and _point2) that define the line to be added.
+            //! \param _point1 The first point which define the line to be added (line define by two points).
+            //! \param _point2 The second point which define the line to be added (line define by two points).
+            //! \param _color The color of the element.
             //! \return Nothing.
-            void addLine(sf::Vector2f _point1, sf::Vector2f _point2);
+            void addLine(sf::Vector2f _point1, sf::Vector2f _point2, sf::Color _color = sf::Color::Black);
             
             //! \brief This function opens the 'm_window' and displays all points and lines contained in the associated vectors.
             //! \param Nothing.
             //! \return Nothing.
             void run();
+            
+            /**
+             * @brief Update and render one frame (non-blocking)
+             * @return true if window is still open, false if closed
+             */
+            bool update();
+
+            /**
+             * @brief Clear all drawn elements
+             */
+            void clear();
+
+            /**
+             * @brief Check if window is open
+             * @return true if window is open, false if closed
+             */
+            bool isOpen() const { return m_window.isOpen(); }
             
         public:
             std::size_t pointCount() const; /*!< Return the number of points stored */
