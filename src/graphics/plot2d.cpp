@@ -12,21 +12,21 @@ robot::graphics::Plot2D::Plot2D(unsigned int width, unsigned int height)
     m_window.setView(m_view);
 }
 
-void robot::graphics::Plot2D::addPoint(sf::Vector2f point) {
+void robot::graphics::Plot2D::addPoint(sf::Vector2f _point, sf::Color _color) {
     // TODO: error handling with status warning or error
-    if (!isInsideWindow(point)) {
+    if (!isInsideWindow(_point)) {
         std::cout << "--> ERROR: This point is outside the window that defines the display environment." << std::endl;
         return;
     }
 
     sf::CircleShape p(4.f);
-    p.setFillColor(sf::Color::Red);
+    p.setFillColor(_color);
     p.setOrigin({4.f, 4.f});
-    p.setPosition(point);
+    p.setPosition(_point);
     m_points.push_back(p);
 }
 
-void robot::graphics::Plot2D::addLine(sf::Vector2f p1, sf::Vector2f p2) {
+void robot::graphics::Plot2D::addLine(sf::Vector2f p1, sf::Vector2f p2, sf::Color _color) {
     // TODO: error handling with status warning or error
     if (!isInsideWindow(p1)) {
         std::cout << "--> ERROR: The first point is outside the window that defines the display environment." << std::endl;
@@ -42,28 +42,44 @@ void robot::graphics::Plot2D::addLine(sf::Vector2f p1, sf::Vector2f p2) {
     sf::VertexArray line(sf::PrimitiveType::Lines, 2);
     line[0].position = p1;
     line[1].position = p2;
-    line[0].color = sf::Color::White;
-    line[1].color = sf::Color::White;
+    line[0].color = _color;
+    line[1].color = _color;
 
     m_lines.push_back(line);
 }
 
 void robot::graphics::Plot2D::run() {
     while (m_window.isOpen()) {
-        while (auto event = m_window.pollEvent()) {
-            if (event->is<sf::Event::Closed>())
-                m_window.close();
-        }
-
-        m_window.clear(sf::Color::Black);
-
-        for (const auto& l : m_lines)
-            m_window.draw(l);
-        for (const auto& p : m_points)
-            m_window.draw(p);
-
-        m_window.display();
+        if (!update())
+            break;
     }
+}
+
+bool robot::graphics::Plot2D::update() {
+    // Handle events
+    while (auto event = m_window.pollEvent()) {
+        if (event->is<sf::Event::Closed>()) {
+            m_window.close();
+            return false;
+        }
+    }
+    
+    // Render
+    m_window.clear(sf::Color::White);
+    
+    for (const auto& l : m_lines)
+        m_window.draw(l);
+    for (const auto& p : m_points)
+        m_window.draw(p);
+    
+    m_window.display();
+    
+    return m_window.isOpen();
+}
+
+void robot::graphics::Plot2D::clear() {
+    m_points.clear();
+    m_lines.clear();
 }
 
 bool robot::graphics::Plot2D::isInsideWindow(sf::Vector2f point) const {
